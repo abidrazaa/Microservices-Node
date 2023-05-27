@@ -1,0 +1,18 @@
+
+CORS ERROR:
+    * CORS request are an issue, any time we are looking at a domain or a domain with a subdomain or a domain with a port that is
+    defferent than the URL or the domain that we are trying to make a request to.
+    E.g: when our frontend is on localhost:3000 and we are making a request to localhost:4000. These ports are different, so the
+    cors request policy comes into effect.
+
+
+EVENT BUS:
+    Q. What event bus is gonna do?
+    Ans. What's an event bus. An event bus implements the publisher/subscriber pattern. It can be used to decouple the components 
+    of an application, so that a component can react to events fired from another component without them having direct dependencies
+    with each other. They only need to know the event bus.
+
+    * RabbitMQ, Kafka, NATS ==> These are all types of event buses. These are open source projects. You can download them and 
+    run them and you can get some kind of pre hosted provided solutions.
+
+
