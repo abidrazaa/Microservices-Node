@@ -6,7 +6,7 @@ const InvoiceTable = require("./Table.js");
 const Receipt = require("./Receipt.js");
 
 const Container = styled("div")`
-  padding: 25px;
+  padding: 5px;
 `;
 
 const InvoicePdf = ({ invoiceData }) => {

@@ -62,6 +62,20 @@ const StyledTableBody = styled(TableBody)`
   height: 100%;
 `;
 
+const TableHeader = styled(TableHead)`
+  display: table-header-group;
+
+  @page {
+    &:first {
+      display: table-header-group; /* Show header on the first page */
+    }
+
+    &:not(:first) {
+      display: none; /* Hide header on subsequent pages */
+    }
+  }
+`;
+
 const StyledTableRow = styled(TableRow)(() => ({
   backgroundColor: "#fff",
   alignItems: "flex-start",
@@ -84,84 +98,6 @@ const InvoiceTable = ({ items }) => {
     return parseFloat(amount.toFixed(2));
   };
 
-  const Item = useCallback(({ row }) => {
-    return (
-      <StyledTableRow>
-        <Product id={"name"}>
-          <Typography
-            variant={"caption"}
-            style={{
-              color: "#344054",
-              overflowWrap: "break-word",
-            }}
-            fontWeight={"500"}
-            display={"block"}
-          >
-            {row.name}
-          </Typography>
-          {row.description && (
-            <DescriptionWrapper>
-              <Typography
-                variant={"caption"}
-                style={{
-                  color: "#344054",
-                  overflowWrap: "break-word",
-                  overflowX: "auto",
-                }}
-                fontWeight={"500"}
-              >
-                {row.description}
-              </Typography>
-            </DescriptionWrapper>
-          )}
-        </Product>
-        <Info align="left" width={100}>
-          <Typography
-            variant={"caption"}
-            style={{
-              color: "#344054",
-              overflowWrap: "break-word",
-              overflowX: "auto",
-            }}
-            fontWeight={"500"}
-          >
-            {row.unit}
-          </Typography>
-        </Info>
-        <Info align="left" width={120}>
-          <Typography
-            variant={"caption"}
-            fontWeight={"500"}
-            style={{
-              overflowWrap: "break-word",
-            }}
-          >
-            {amountToLocal(row.perItemSellPrice)}
-          </Typography>
-        </Info>
-        <Info align="left" width={100}>
-          <Typography variant={"caption"} fontWeight={"500"}>
-            {row.quantity}
-          </Typography>
-        </Info>
-        <Info align="left" width={100}>
-          <Typography
-            variant={"caption"}
-            fontWeight={"500"}
-            color={"#267755"}
-            style={{
-              overflowWrap: "break-word",
-            }}
-          >
-            {amountToLocal(
-              convertNumber(row.quantity) * convertNumber(row.perItemSellPrice)
-            )}
-          </Typography>
-        </Info>
-      </StyledTableRow>
-    );
-  });
-
   return (
     <>
       <div style={{ margin: "30px 0px" }} />
@@ -169,7 +105,7 @@ const InvoiceTable = ({ items }) => {
         <Paper sx={{ width: "100%" }}>
           <StyledTableContainer>
             <Table aria-label="sticky table">
-              <TableHead>
+              <TableHeader>
                 <ProductCell id={"name"}>
                   <Typography
                     variant={"caption"}
@@ -199,10 +135,83 @@ const InvoiceTable = ({ items }) => {
                     Line Total
                   </Typography>
                 </MedCell>
-              </TableHead>
+              </TableHeader>
               <StyledTableBody>
                 {items.map((row) => (
-                  <Item key={`${row.id}`} row={row} />
+                  <StyledTableRow key={row["id"]}>
+                    <Product id={"name"}>
+                      <Typography
+                        variant={"caption"}
+                        style={{
+                          color: "#344054",
+                          overflowWrap: "break-word",
+                        }}
+                        fontWeight={"500"}
+                        display={"block"}
+                      >
+                        {row.name}
+                      </Typography>
+                      {row.description && (
+                        <DescriptionWrapper>
+                          <Typography
+                            variant={"caption"}
+                            style={{
+                              color: "#344054",
+                              overflowWrap: "break-word",
+                              overflowX: "auto",
+                            }}
+                            fontWeight={"500"}
+                          >
+                            {row.description}
+                          </Typography>
+                        </DescriptionWrapper>
+                      )}
+                    </Product>
+                    <Info align="left" width={100}>
+                      <Typography
+                        variant={"caption"}
+                        style={{
+                          color: "#344054",
+                          overflowWrap: "break-word",
+                          overflowX: "auto",
+                        }}
+                        fontWeight={"500"}
+                      >
+                        {row.unit}
+                      </Typography>
+                    </Info>
+                    <Info align="left" width={120}>
+                      <Typography
+                        variant={"caption"}
+                        fontWeight={"500"}
+                        style={{
+                          overflowWrap: "break-word",
+                        }}
+                      >
+                        {amountToLocal(row.perItemSellPrice)}
+                      </Typography>
+                    </Info>
+                    <Info align="left" width={100}>
+                      <Typography variant={"caption"} fontWeight={"500"}>
+                        {row.quantity}
+                      </Typography>
+                    </Info>
+                    <Info align="left" width={100}>
+                      <Typography
+                        variant={"caption"}
+                        fontWeight={"500"}
+                        color={"#267755"}
+                        style={{
+                          overflowWrap: "break-word",
+                        }}
+                      >
+                        {amountToLocal(
+                          convertNumber(row.quantity) *
+                            convertNumber(row.perItemSellPrice)
+                        )}
+                      </Typography>
+                    </Info>
+                  </StyledTableRow>
                 ))}
               </StyledTableBody>
             </Table>

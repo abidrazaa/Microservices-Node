@@ -1,6 +1,6 @@
 const { FlexRow, FlexCol } = require("../Components/Flex/index.js");
 const React = require("react");
-const { Typography } = require("@mui/material");
+const { Typography, Box } = require("@mui/material");
 const { styled } = require("@mui/system");
 const {
   calculateSubTotal,
@@ -26,6 +26,11 @@ const ReceiptBox = styled("div")(({ theme }) => ({
   width: "30%",
   minHeight: "160px",
 }));
+
+const ReceiptContainer = styled("div")`
+  /* Add the page-break-inside property to avoid breaking the content across pages */
+  page-break-inside: avoid;
+`;
 
 const Row = styled(FlexRow)`
   display: grid;
@@ -55,6 +60,12 @@ const Line = styled("div")`
   margin: 10px 0 0 0;
 `;
 
+const Footer = styled("div")`
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+`;
+
 const Receipt = ({ invoice }) => {
   const { comments, advance, taxes, extraCharges, items, discount } = invoice;
 
@@ -80,90 +91,108 @@ const Receipt = ({ invoice }) => {
 
   return (
     <>
-      <div style={{ margin: "30px 0px" }} />
-      <FlexRow style={{ width: "100%" }}>
-        {comments && (
-          <CommentBox>
-            <Typography variant="caption">{comments}</Typography>
-          </CommentBox>
-        )}
-        <div style={{ width: "2%" }} />
-        <ReceiptBox>
-          <Row>
-            <Title txt={"Total items"} />
-            <Col>
-              <Text txt={items.length.toString()} />
-            </Col>
-          </Row>
-          <Row>
-            <Title txt={"SubTotal (PKR):"} />
-            <Col>
-              <Text txt={amountToLocal(totalItemCost)} />
-            </Col>
-          </Row>
-          {taxes && taxes.length > 0 && (
-            <>
-              <Row>
-                <Title txt={"Taxes (PKR):"} />
-              </Row>
-              <TaxWrapper>
-                {taxes.map((d) => (
-                  <Row key={`${d.name}${d.rate}`}>
-                    <Title txt={`${d.name} (${d.rate}%)`} />
-                    <Col>
-                      <Text
-                        txt={amountToLocal((totalItemCost * d.rate) / 100)}
-                      />
-                    </Col>
-                  </Row>
-                ))}
-              </TaxWrapper>
-            </>
+      <ReceiptContainer>
+        <div style={{ margin: "30px 0px" }} />
+        <FlexRow style={{ width: "100%" }}>
+          {comments && (
+            <CommentBox>
+              <Typography variant="caption">{comments}</Typography>
+            </CommentBox>
           )}
-          {extraCharges &&
-            extraCharges.map((e) => (
-              <Row key={`${e.description}-${e.amount}`}>
-                <Title txt={`${e.description}:`} />
+          {!comments && <div style={{ width: "68%" }} />}
+          <div style={{ width: "2%" }} />
+          <ReceiptBox>
+            <Row>
+              <Title txt={"Total items"} />
+              <Col>
+                <Text txt={items.length.toString()} />
+              </Col>
+            </Row>
+            <Row>
+              <Title txt={"SubTotal (PKR):"} />
+              <Col>
+                <Text txt={amountToLocal(totalItemCost)} />
+              </Col>
+            </Row>
+            {taxes && taxes.length > 0 && (
+              <>
+                <Row>
+                  <Title txt={"Taxes (PKR):"} />
+                </Row>
+                <TaxWrapper>
+                  {taxes.map((d) => (
+                    <Row key={`${d.name}${d.rate}`}>
+                      <Title txt={`${d.name} (${d.rate}%)`} />
+                      <Col>
+                        <Text
+                          txt={amountToLocal((totalItemCost * d.rate) / 100)}
+                        />
+                      </Col>
+                    </Row>
+                  ))}
+                </TaxWrapper>
+              </>
+            )}
+            {extraCharges &&
+              extraCharges.map((e) => (
+                <Row key={`${e.description}-${e.amount}`}>
+                  <Title txt={`${e.description}:`} />
+                  <Col>
+                    <Text txt={amountToLocal(e.amount)} />
+                  </Col>
+                </Row>
+              ))}
+            {totalDiscount !== 0 && (
+              <Row>
+                <Title txt={"Discount (PKR):"} />
                 <Col>
-                  <Text txt={amountToLocal(e.amount)} />
+                  <Text txt={amountToLocal(totalDiscount)} />
                 </Col>
               </Row>
-            ))}
-          {totalDiscount !== 0 && (
+            )}
+            {totalAdvance !== 0 && (
+              <Row>
+                <Title txt={"Advance (PKR):"} />
+                <Col>
+                  <Text txt={`-${amountToLocal(totalAdvance)}`} />
+                </Col>
+              </Row>
+            )}
+            <Line />
             <Row>
-              <Title txt={"Discount (PKR):"} />
-              <Col>
-                <Text txt={amountToLocal(totalDiscount)} />
-              </Col>
+              <Typography variant={"caption"} fontWeight={600}>
+                {"Grand Total (PKR):"}{" "}
+              </Typography>
+              <FlexRow />
             </Row>
-          )}
-          {totalAdvance !== 0 && (
             <Row>
-              <Title txt={"Advance (PKR):"} />
-              <Col>
-                <Text txt={`-${amountToLocal(totalAdvance)}`} />
-              </Col>
+              <FlexRow />
+              <Typography
+                variant={"subtitle2"}
+                fontWeight={600}
+                fontSize={"30px"}
+              >
+                {amountToLocal(convertNumber(totalAmount))}
+              </Typography>
             </Row>
-          )}
-          <Line />
-          <Row>
-            <Typography variant={"caption"} fontWeight={600}>
-              {"Grand Total (PKR):"}{" "}
-            </Typography>
-            <FlexRow />
-          </Row>
-          <Row>
-            <FlexRow />
-            <Typography
-              variant={"subtitle2"}
-              fontWeight={600}
-              fontSize={"30px"}
-            >
-              {amountToLocal(convertNumber(totalAmount))}
-            </Typography>
-          </Row>
-        </ReceiptBox>
-      </FlexRow>
+          </ReceiptBox>
+        </FlexRow>
+        <div>
+          <Box
+            component="img"
+            sx={{
+              height: 100,
+              width: 100,
+              maxHeight: { xs: 100, md: 50 },
+              maxWidth: { xs: 100, md: 50 },
+            }}
+            alt="ordr logo"
+            src={
+              "https://cb-business.s3.amazonaws.com/645a135e18def7b058c0c598/business-pic-KXCAdnRCUffYtWUMLr5iD-1689790557374.jpeg"
+            }
+          />
+        </div>
+      </ReceiptContainer>
     </>
   );
 };
