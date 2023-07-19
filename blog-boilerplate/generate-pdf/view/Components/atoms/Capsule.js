@@ -1,6 +1,5 @@
 
 const React = require('react');
-const {FlexRow} = require('../Flex/index.js')
 const { styled } = require('@mui/system');
 const { Typography } = require('@mui/material');
 
