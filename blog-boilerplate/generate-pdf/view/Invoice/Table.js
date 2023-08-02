@@ -76,6 +76,10 @@ const TableHeader = styled(TableHead)`
   }
 `;
 
+const TableHeaderCell = styled(MedCell)`
+  border: 2px solid black;
+`
+
 const StyledTableRow = styled(TableRow)(() => ({
   backgroundColor: "#fff",
   alignItems: "flex-start",
@@ -104,9 +108,9 @@ const InvoiceTable = ({ items }) => {
       <Wrapper>
         <Paper sx={{ width: "100%" }}>
           <StyledTableContainer>
-            <Table aria-label="sticky table">
-              <TableHeader>
-                <ProductCell id={"name"}>
+            <Table aria-label="sticky table" style={{border: '2px solid black'}}>
+              <TableHeader style={{border: '2px solid black'}}>
+                <ProductCell id={"name"} style={{border: '2px solid black'}}>
                   <Typography
                     variant={"caption"}
                     style={{ color: "#344054" }}
@@ -115,30 +119,30 @@ const InvoiceTable = ({ items }) => {
                     Items
                   </Typography>
                 </ProductCell>
-                <MedCell align="left" width={100}>
+                <TableHeaderCell align="left" width={100}>
                   <Typography variant={"caption"} fontWeight={"500"}>
                     Unit
                   </Typography>
-                </MedCell>
-                <MedCell align="left" width={120}>
+                </TableHeaderCell>
+                <TableHeaderCell align="left" width={120}>
                   <Typography variant={"caption"} fontWeight={"500"}>
                     Selling Price
                   </Typography>
-                </MedCell>
-                <MedCell align="left" width={100}>
+                </TableHeaderCell>
+                <TableHeaderCell align="left" width={100}>
                   <Typography variant={"caption"} fontWeight={"500"}>
                     Quantity
                   </Typography>
-                </MedCell>
-                <MedCell align="left" width={100}>
+                </TableHeaderCell>
+                <TableHeaderCell align="left" width={100}>
                   <Typography variant={"caption"} fontWeight={"500"}>
                     Line Total
                   </Typography>
-                </MedCell>
+                </TableHeaderCell>
               </TableHeader>
               <StyledTableBody>
                 {items.map((row) => (
-                  <StyledTableRow key={row["id"]}>
+                  <StyledTableRow key={row["id"]} style={{border: '2px solid black'}}>
                     <Product id={"name"}>
                       <Typography
                         variant={"caption"}

@@ -95,7 +95,7 @@ const Receipt = ({ invoice }) => {
         <div style={{ margin: "30px 0px" }} />
         <FlexRow style={{ width: "100%" }}>
           {comments && (
-            <CommentBox>
+            <CommentBox style={{border: '1px solid black'}}>
               <Typography variant="caption">{comments}</Typography>
             </CommentBox>
           )}
